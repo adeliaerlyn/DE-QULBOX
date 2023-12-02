@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Kelompok 1 Bliss</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.ico" rel="icon">
+  <!-- <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{ url_for('static', filename='vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo" style="display: flex; align-items: center;">
+        <a href="index.html" style="margin-right: 10px;"><img src="assets/img/orbit_logo.jpg" alt="" class="img-fluid"></a>
+        <h1><a href="index.html">Orbit Future Academy</a></h1>
+      </div>
+    
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="#prediksi">Prediksi</a></li>
+          <li><a class="nav-link scrollto" href="#team">Team</a></li>
+          <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+      <!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1 data-aos="fade-up">DE QULBOX: Deteksi Quality Control Package Box</h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">Solusi Cepat & Akurat untuk Memastikan Kualitas Kemasan Anda!</h2>
+          <div data-aos="fade-up" data-aos-delay="800">
+            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
+          <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Us Section ======= -->
+    <section id="about" class="about" style="text-align: center;">
+      <section class="team section-bg">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>About Us</h2>
+        </div>
+        <div class="row content">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150" style="margin: 0 auto; text-align: justify;">
+            <p>
+              DE QULBOX adalah solusi terpercaya Anda dalam mengoptimalkan kualitas kemasan produk. Kami dengan bangga menawarkan solusi modern yang memungkinkan Anda untuk mendeteksi, memahami, dan memastikan kualitas kemasan dengan cepat dan efisien.
+            </p>
+            <ul>
+              <li><i class="ri-check-double-line"></i> Memberikan komitmen dengan layanan terbaik dalam mendeteksi dan memastikan kualitas kemasan.</li>
+              <li><i class="ri-check-double-line"></i> Memastikan keakuratan dan kecepatan dalam pengujian kemasan.</li>
+              <li><i class="ri-check-double-line"></i> Menghemat waktu dan sumber daya, menjaga kualitas produk tetap terjaga.</li>
+            </ul>
+            <p>
+              Kami bangga dapat menjadi bagian dari perjalanan bisnis Anda dalam menjaga kualitas kemasan.
+            </p>
+          </div>
+        </div>
+      </div>
+      </section>
+    </section>
+
+
+    <!-- Bagian Halaman (Prediksi) -->
+    <section id="prediksi">
+      <div class="container">
+
+      <div class="section-title" data-aos="fade-up">
+        <h2>Prediksi</h2>
+      </div>
+
+
+      <input id="uploadInput" type="file"/>
+      <canvas></canvas>
+      <script>
+        /**
+         * "Upload" button onClick handler: uploads selected 
+         * image file to backend, receives an array of
+         * detected objects and draws them on top of image
+         */
+        const input = document.getElementById("uploadInput");
+        input.addEventListener("change",async(event) => {
+            const file = event.target.files[0];
+            const data = new FormData();
+            data.append("image_file",file,"image_file");
+            const response = await fetch("/detect",{
+                method:"post",
+                body:data
+            });
+            const boxes = await response.json();
+            draw_image_and_boxes(file,boxes);
+        })
+
+        /**
+         * Function draws the image from provided file
+         * and bounding boxes of detected objects on
+         * top of the image
+         * @param file Uploaded file object
+         * @param boxes Array of bounding boxes in format
+           [[x1,y1,x2,y2,object_type,probability],...]
+        */
+        function draw_image_and_boxes(file,boxes) {
+            const img = new Image()
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+                const canvas = document.querySelector("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img,0,0);
+                ctx.strokeStyle = "#00FF00";
+                ctx.lineWidth = 3;
+                ctx.font = "18px serif";
+                boxes.forEach(([x1,y1,x2,y2,label]) => {
+                    ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+                    ctx.fillStyle = "#00ff00";
+                    const width = ctx.measureText(label).width;
+                    ctx.fillRect(x1,y1,width+10,25);
+                    ctx.fillStyle = "#000000";
+                    ctx.fillText(label,x1,y1+18);
+                });
+            }
+        }
+      </script>  
+      </div>
+    </section>
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team section-bg">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>Team</h2>
+          <p>Kelompok 1 - Bliss</p>
+        </div>
+    
+        <div class="row justify-content-center">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/imelda.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Imelda Agustin</h4>
+                <span>Universitas Jember</span>
+                <span>210210301073</span>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/rosi.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Dunhil Faida Rosi</h4>
+                <span>Universitas Negeri Surabaya</span>
+                <span>21030244043</span>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/erlyn.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Adelia Erlyn N.C.P.</h4>
+                <span>Universitas Lambung Mangkurat</span>
+                <span>2110131320010</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row justify-content-center">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/sasi.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Sasi Savitri</h4>
+                <span>Universitas Jember</span>
+                <span>210210301063</span>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/afrizal.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Muhammad Afrizal Yusuf</h4>
+                <span>Universitas Sari Mulia</span>
+                <span>11203362110068</span>
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="600">
+            <div class="member" data-aos="fade-up" data-aos-delay="600">
+              <div class="member-img">
+                <img src="assets/img/team/yuliana.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Noor Yuliana Dewi</h4>
+                <span>Universitas Sari Mulia</span>
+                <span>11203462010018</span>
+                <span
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Team Section -->
+
+    <!-- ======= F.A.Q Section ======= -->
+    <section id="faq" class="faq">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>Bagaimana DE QULBOX bekerja dalam mendeteksi kualitas kemasan?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              DE QULBOX menggunakan kecerdasan buatan (AI) untuk menganalisis gambar kemasan yang Anda unggah. AI kami akan secara otomatis mendeteksi dan mengevaluasi kualitas kemasan, memberikan laporan yang terperinci.
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>Bagaimana cara mengintegrasikan DE QULBOX ke dalam proses produksi kami?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              Integrasi DE QULBOX mudah dilakukan. Tim kami akan memberikan panduan dan dukungan teknis untuk memastikan platform kami berjalan mulus dalam proses produksi Anda.
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4> Apakah DE QULBOX dapat digunakan untuk deteksi cacat visual atau masalah kualitas lainnya?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              Ya, DE QULBOX mampu mendeteksi berbagai jenis masalah kualitas, termasuk cacat visual, ketidaksesuaian desain. Ini adalah solusi komprehensif untuk memastikan kualitas produk Anda.
+            </p>
+          </div>
+        </div>
+        <!-- End F.A.Q Item-->
+      </div>
+    </section>
+    <!-- End F.A.Q Section -->
+
+  </main>
+  <!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <div class="copyright">
+            <strong>Orbit Future Academy</strong>
+          </div>
+          <div class="credits">
+            Kelompok 1 - Bliss
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
