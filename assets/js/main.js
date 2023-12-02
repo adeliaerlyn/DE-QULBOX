@@ -261,3 +261,5 @@
   new PureCounter();
 
 })()
+
+img.src = `/assets/img/uploaded/${file.name}`;
