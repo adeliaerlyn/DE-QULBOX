@@ -18,7 +18,7 @@ def root():
         return file.read()
 
 
-@app.route("/detect", methods=["POST"])
+@app.route("/detect", methods=["GET","POST"])
 def detect():
     buf = request.files["image_file"]
     image = Image.open(buf.stream)
